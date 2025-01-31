@@ -1,35 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <header>
+        <h1>Guess My Number!</h1>
+        <p className="between">(Between 1 and 20)</p>
+        <button className="btn again">Again!</button>
+        <div className="number">?</div>
+      </header>
+      <main>
+        <section className="left">
+          <input type="number" className="guess" />
+          <button className="btn check">Check!</button>
+        </section>
+        <section className="right">
+          <p className="message">Start guessing...</p>
+          <p className="label-score">
+            💯 Score: <span className="score">20</span>
+          </p>
+          <p className="label-highscore">
+            🥇 Highscore: <span className="highscore">0</span>
+          </p>
+        </section>
+      </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
