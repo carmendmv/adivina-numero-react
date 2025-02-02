@@ -7,23 +7,32 @@ const number = () => Math.floor(Math.random() * 20) + 1;
 function App() {
   const [score, setScore] = useState(20);
   const [highscore, setHighscore] = useState(0);
+  const [message, setMessage] = useState("Start guessing...");
+  const [number, setNumber] = useState(generateRandomNumber());
   const inputRef = useRef(null); //useRef equivale al querySelector de js
 
   const handleCheckNumber = () => {
     //comprobar si el valor introducido es igual al número introducido
     const inputNumber = inputRef.current.value;
     if (inputNumber === number) {
-      //hemos genado
+      //hemos ganado
+      setMessage("Número correcto! Has ganado!");
+      if (score > highscore) {
+        setHighscore(score);
     } else if (inputNumber > number) {
       //el valor introducido es mayor que el numero aleatorio
-      //poner mensaje setMessage y usar displayMessage
+      //poner mensaje setMessage y usar state message
+      setMessage("📉 Too high! Bajale");
     } else {
       //el valor introducido es menor que el número aleatorio
-      // //poner mensaje setMessage y usar displayMessage
+      // //poner mensaje setMessage y usar state message
+      setMessage("📈 Too low! Inténtalo de nuevo");
     }
     console.log(inputRef.current.value);
     setScore(score - 1);
+  }
   };
+
   return (
     <>
       <header>
