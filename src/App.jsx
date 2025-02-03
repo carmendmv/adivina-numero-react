@@ -11,7 +11,7 @@ function App() {
   const [message, setMessage] = useState("Start guessing..."); // Mensaje que se muestra
   const [number, setNumber] = useState(generateRandomNumber()); // Número aleatorio generado
   const [guessedCorrectly, setGuessedCorrectly] = useState(false); // Estado para saber si el jugador adivinó el número
-  const inputRef = useRef(null); // Referencia para el campo de entrada de número
+  const inputRef = useRef(null); // Referencia para el campo de entrada de número ---> useRef equivale al querySelector
 
   const handleCheckNumber = () => {
     const inputNumber = Number(inputRef.current.value); // Convertimos la entrada a un número
@@ -63,9 +63,10 @@ function App() {
         <button className="btn again" onClick={handleAgain}>
           Again!
         </button>
-        {guessedCorrectly && (
-          <div className="number">{number}</div> // Solo mostrar el número cuando se haya adivinado correctamente
-        )}
+        <div className="number">
+          {guessedCorrectly ? number : "?"}{" "}
+          {/* Mostrar el número solo si se adivina correctamente */}
+        </div>
       </header>
       <main>
         <section className="left">
