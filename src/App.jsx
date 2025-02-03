@@ -1,89 +1,55 @@
 import "./App.css";
 // react hooks
-import { useState, useRef } from "react";
-
-// Función para generar el número aleatorio
-const generateRandomNumber = () => Math.floor(Math.random() * 20) + 1;
-
+import { useState, useRef, useEffect } from "react";
+import Resultados from "./Resultados";
+const secretNumber = Math.trunc(Math.random() * 20) + 1;
 function App() {
-  const [score, setScore] = useState(20); // Puntaje del jugador
-  const [highscore, setHighscore] = useState(0); // Puntaje más alto
-  const [message, setMessage] = useState("Start guessing..."); // Mensaje que se muestra
-  const [number, setNumber] = useState(generateRandomNumber()); // Número aleatorio generado
-  const [guessedCorrectly, setGuessedCorrectly] = useState(false); // Estado para saber si el jugador adivinó el número
-  const inputRef = useRef(null); // Referencia para el campo de entrada de número ---> useRef equivale al querySelector
+  const [score, setScore] = useState(20);
+  const [highscore, setHighscore] = useState(0);
+  const [guessNumber, setGuessNumber] = useState("");
+  const inputRef = useRef(null);
+  const handleCheck = () => {
+    // comprobar si el valor introducido es igual al número aleatorio
+    setGuessNumber(Number(inputRef.current.value));
+  };
 
-  const handleCheckNumber = () => {
-    const inputNumber = Number(inputRef.current.value); // Convertimos la entrada a un número
-
-    if (!inputNumber || inputNumber < 1 || inputNumber > 20) {
-      setMessage("⛔ Please enter a valid number between 1 and 20.");
-      return; // Si el número no es válido, salimos de la función
-    }
-
-    if (inputNumber === number) {
-      // Si el número introducido es el correcto
-      setMessage("✅ Correct! You win!");
-      setGuessedCorrectly(true); // Marcamos que el jugador adivinó correctamente
-      if (score > highscore) {
-        setHighscore(score); // Actualizamos el puntaje más alto si corresponde
-      }
+  //arrow functions () => {}
+  useEffect(() => {
+    if (!Number(guessNumber)) return; //si no ponemos número, retornamos, no hacemos nada
+    if (guessNumber === secretNumber) {
+      // if (score > highscore) setHighscore(score);
+      setHighscore(Math.max(score, highscore));
     } else {
-      // Si el número introducido no es correcto
-      setScore((prevScore) => prevScore - 1); // Reducimos el puntaje
-
-      if (inputNumber > number) {
-        // Si el número es mayor que el número aleatorio
-        setMessage("📉 Too high! Try again.");
-      } else {
-        // Si el número es menor que el número aleatorio
-        setMessage("📈 Too low! Try again.");
-      }
+      // el valor introducido es menor que el número aleatorio
+      setScore(score - 1);
     }
-
-    if (score <= 1) {
-      // Si el puntaje llega a 0 o menos, el jugador pierde
-      setMessage("💥 Game over! You lost.");
-    }
-  };
-
-  const handleAgain = () => {
-    setScore(20); // Restablecemos el puntaje a 20
-    setMessage("Start guessing..."); // Restablecemos el mensaje
-    setNumber(generateRandomNumber()); // Generamos un nuevo número aleatorio
-    setGuessedCorrectly(false); // Restablecemos el estado de adivinanza
-    inputRef.current.value = ""; // Limpiamos el campo de entrada
-  };
+  }, [guessNumber]); //[array con parámetros]
 
   return (
     <>
       <header>
         <h1>Guess My Number!</h1>
-        <p className="between">(Between 1 and 20)</p>
-        <button className="btn again" onClick={handleAgain}>
-          Again!
-        </button>
+        <p className="between">
+          (Between 1 and 20 but it is {secretNumber} )
+        </p>{" "}
+        <button className="btn again">Again!</button>
         <div className="number">
-          {guessedCorrectly ? number : "?"}{" "}
-          {/* Mostrar el número solo si se adivina correctamente */}
+          {guessNumber === secretNumber ? secretNumber : "?"}
         </div>
       </header>
       <main>
         <section className="left">
           <input type="number" className="guess" ref={inputRef} />
-          <button className="btn check" onClick={handleCheckNumber}>
+          <button className="btn check" onClick={handleCheck}>
             Check!
           </button>
         </section>
-        <section className="right">
-          <p className="message">{message}</p>
-          <p className="label-score">
-            💯 Score: <span className="score">{score}</span>
-          </p>
-          <p className="label-highscore">
-            🥇 Highscore: <span className="highscore">{highscore}</span>
-          </p>
-        </section>
+        <Resultados
+          score={score}
+          highscore={highscore}
+          guessNumber={guessNumber}
+          secretNumber={secretNumber}
+        />
       </main>
     </>
   );
